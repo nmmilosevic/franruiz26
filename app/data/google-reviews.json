@@ -1,0 +1,51 @@
+{
+  "rating": 4.9,
+  "googleReviewCount": 69,
+  "verifiedAt": "2026-07-28",
+  "sourceUrl": "https://www.trustindex.io/reviews/franruizarquitectos.com",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Fran+Ruiz+Arquitectos+Alhaurin+de+la+Torre",
+  "reviews": [
+    {
+      "name": "Efrain Navarro",
+      "date": "2026-06-29",
+      "rating": 5,
+      "es": "Excelente! Muy buenos profesionales, lo recomiendo 👍",
+      "en": "Excellent! A highly professional team, I recommend them 👍"
+    },
+    {
+      "name": "David Pardo Gutierrez",
+      "date": "2026-05-26",
+      "rating": 5,
+      "es": "Fran y su equipo tienen una dilata experiencia en lo suyo, una garantia a la hora de confiar tú proyecto en ellos. Totalmente recomendable.",
+      "en": "Fran and his team have extensive experience in their field. You can trust them with your project. Completely recommended."
+    },
+    {
+      "name": "Javier Villalón",
+      "date": "2026-05-21",
+      "rating": 5,
+      "es": "Estudio de arquitectura que te ayudará, con profesionalidad y máxima seriedad, a llevar a cabo tus proyectos. Recomendable 🔝",
+      "en": "An architecture studio that will help you deliver your projects with professionalism and the utmost care. Recommended 🔝"
+    },
+    {
+      "name": "Oliver Malagon",
+      "date": "2026-05-21",
+      "rating": 5,
+      "es": "Gran profesional y mejor persona, me ayudó mucho en el diseño de mi casa",
+      "en": "A great professional and an even better person. He helped me enormously with the design of my house."
+    },
+    {
+      "name": "Rocio Navarro Otermin",
+      "date": "2026-05-21",
+      "rating": 5,
+      "es": "He trabajado con el estudio Fran Ruiz Arquitectos, y la experiencia fue fantástica y muy recomendable. Son grandes profesionales, y tienen una enorme experiencia en el diseño y tramitación de expedientes de arquitectura.",
+      "en": "I worked with Fran Ruiz Arquitectos and the experience was fantastic. They are highly professional and have extensive experience in architectural design and planning applications."
+    },
+    {
+      "name": "Asun Vil",
+      "date": "2026-05-21",
+      "rating": 5,
+      "es": "Tuve una experiencia excelente con este arquitecto. Además de su talento técnico, destacó por su responsabilidad y disposición para resolver cualquier problema que surgiera. El resultado final superó mis expectativas.",
+      "en": "I had an excellent experience with this architect. Alongside his technical talent, his responsibility and willingness to solve every issue stood out. The final result exceeded my expectations."
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Tenor_Sans } from "next/font/google";
+import MotionSystem from "./components/MotionSystem";
+import PageTransition from "./components/PageTransition";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -33,15 +35,19 @@ export const metadata: Metadata = {
     images: ["/og.png"],
   },
   icons: {
-    icon: "/brand/isotipo-original.jpg",
-    shortcut: "/brand/isotipo-original.jpg",
+    icon: "/brand/logo-fran.svg",
+    shortcut: "/brand/logo-fran.svg",
   },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es">
-      <body className={`${manrope.variable} ${tenor.variable}`}>{children}</body>
+      <body className={`${manrope.variable} ${tenor.variable}`}>
+        <PageTransition />
+        <MotionSystem />
+        {children}
+      </body>
     </html>
   );
 }
