@@ -7,7 +7,16 @@ import ArrowIcon from "../../components/ArrowIcon";
 import SiteFooter from "../../components/SiteFooter";
 import projectsData from "../../data/projects.json";
 
-type Project = (typeof projectsData)[number];
+type ProjectVideo = {
+  src: string;
+  sourceUrl?: string;
+};
+
+type Project = Omit<(typeof projectsData)[number], "videos"> & {
+  // projects.json currently uses empty arrays, so TS would infer `never[]`
+  // without an explicit video shape for future media.
+  videos: ProjectVideo[];
+};
 
 export function generateStaticParams() {
   return projectsData.map((project) => ({ slug: project.slug }));

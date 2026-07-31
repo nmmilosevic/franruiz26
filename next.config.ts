@@ -1,11 +1,17 @@
 import type { NextConfig } from "next";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
-  // The local Cloudflare preview does not expose the production ASSETS
-  // binding used by vinext's image optimizer. Serve the already optimized
-  // project media directly in both development and production.
+  // Prevent Next from picking a parent lockfile as the workspace root on local machines.
+  turbopack: {
+    root: projectRoot,
+  },
+  // Vercel provides Next.js Image Optimization for local /public assets.
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
   },
 };
 
