@@ -188,12 +188,11 @@ p { text-wrap: pretty; }
 
 .project-index-image img {
   object-fit: cover;
-  transition: transform 1.2s var(--ease), filter 700ms ease;
+  transition: transform 1.2s var(--ease);
 }
 
 .project-index-card a:hover .project-index-image img {
   transform: scale(1.025);
-  filter: saturate(.82);
 }
 
 .project-index-meta {
@@ -239,8 +238,8 @@ p { text-wrap: pretty; }
 }
 
 @keyframes project-hero-enter {
-  from { opacity: .55; transform: scale(1.045); }
-  to { opacity: 1; transform: scale(1); }
+  from { transform: scale(1.045); }
+  to { transform: scale(1); }
 }
 
 .project-hero-shade {
@@ -401,7 +400,7 @@ p { text-wrap: pretty; }
 .next-project-image {
   z-index: -3;
   object-fit: cover;
-  transition: transform 1.2s var(--ease), filter 700ms ease;
+  transition: transform 1.2s var(--ease);
 }
 
 .next-project-shade {
@@ -471,7 +470,6 @@ p { text-wrap: pretty; }
 }
 
 .next-project:hover .next-project-image {
-  filter: saturate(.84);
   transform: scale(1.025);
 }
 
@@ -796,7 +794,6 @@ p { text-wrap: pretty; }
 .studio-profile-team-portrait img {
   object-fit: cover;
   object-position: center top;
-  filter: grayscale(1);
 }
 
 @media (max-width: 980px) {
@@ -1622,10 +1619,10 @@ main > section:first-of-type {
 
 .home-project-image img {
   object-fit: cover;
-  transition: transform 1.2s var(--ease), filter 700ms ease;
+  transition: transform 1.2s var(--ease);
 }
 
-.home-project a:hover img { transform: scale(1.025); filter: saturate(.82); }
+.home-project a:hover img { transform: scale(1.025); }
 
 .home-project-caption {
   display: grid;
@@ -2454,8 +2451,8 @@ main > section:first-of-type {
 }
 
 @keyframes hero-settle {
-  from { transform: scale(1.06); filter: saturate(0.75); }
-  to { transform: scale(1); filter: saturate(0.92); }
+  from { transform: scale(1.06); }
+  to { transform: scale(1); }
 }
 
 .hero-shade {
@@ -2636,7 +2633,7 @@ main > section:first-of-type {
 
 .project-image img {
   object-fit: cover;
-  transition: transform 1s var(--ease), filter 650ms ease;
+  transition: transform 1s var(--ease);
 }
 
 .project-hover {
@@ -2655,7 +2652,7 @@ main > section:first-of-type {
   transition: opacity 450ms var(--ease), transform 450ms var(--ease);
 }
 
-.project-button:hover .project-image img { transform: scale(1.025); filter: saturate(0.82); }
+.project-button:hover .project-image img { transform: scale(1.025); }
 .project-button:hover .project-hover { opacity: 1; transform: none; }
 
 .project-caption {
@@ -3764,7 +3761,6 @@ main > section:first-of-type {
 
 .studio-profile-team-images img {
   object-fit: cover;
-  filter: grayscale(1);
 }
 
 .studio-profile-team-copy > p {
@@ -5796,13 +5792,12 @@ main hr {
 .service-archive-card figure img,
 .service-related figure img {
   object-fit: cover;
-  transition: transform 1.1s var(--ease), filter 700ms ease;
+  transition: transform 1.1s var(--ease);
 }
 
 .service-archive-card a:hover figure img,
 .service-related a:hover figure img {
   transform: scale(1.025);
-  filter: saturate(.82);
 }
 
 .service-archive-card-copy {
@@ -6325,7 +6320,7 @@ main hr {
 
 .home-service-visual > img {
   object-fit: cover;
-  transition: filter 700ms ease, transform 1.2s var(--ease);
+  transition: transform 1.2s var(--ease);
 }
 
 .home-service-item--2 .home-service-visual > img { object-position: 62% center; }
@@ -6394,7 +6389,6 @@ main hr {
 
 .home-service-item > a:hover .home-service-visual > img,
 .home-service-item > a:focus-visible .home-service-visual > img {
-  filter: saturate(.82);
   transform: scale(1.025);
 }
 
@@ -7871,6 +7865,34 @@ main hr {
 .new-hero-bottom .action-pill:hover,
 .new-hero-bottom .action-pill:focus-visible {
   gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+
+/* No contrast/saturation filters on content photography */
+.project-index-image img,
+.home-project-image img,
+.home-service-visual > img,
+.home-studio-image img,
+.project-gallery-item img,
+.source-gallery-item img,
+.service-archive-card figure img,
+.service-related figure img,
+.service-detail-gallery img,
+.studio-profile-origin-media img,
+.studio-profile-method-composition img,
+.studio-profile-disciplines-intro img,
+.studio-profile-team-portrait img,
+.studio-profile-team-images img,
+.team-person img,
+.portrait img,
+.next-project-image,
+.project-hero > img,
+.hero-media img,
+.new-hero-media img,
+.sheet-image img,
+.source-hero > img,
+.service-detail-hero > img {
+  filter: none !important;
 }
 
 /* Site motion language — quiet optical focus with word-led headings. */
