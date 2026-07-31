@@ -2855,15 +2855,33 @@ main > section:first-of-type {
   position: relative;
   aspect-ratio: 7 / 10;
   overflow: hidden;
-  background: var(--line);
+  background: transparent;
 }
 
 .team-person:nth-child(5) .team-person-image { aspect-ratio: 7 / 10; }
 .team-person img {
   object-fit: cover;
   object-position: center top;
+  opacity: 1;
+  filter: none;
   transition: transform 850ms var(--ease);
 }
+
+/* Team portraits: no reveal/fade — full image from first paint */
+.team-person,
+.team-person[data-reveal],
+.team-person[data-motion],
+html.motion-ready .team-person[data-motion],
+html.motion-ready .team-person[data-motion]:not([data-visible="true"]),
+html.motion-ready .team-person[data-motion][data-visible="true"] {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+  filter: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+
 .team-person:hover img { transform: scale(1.025); }
 
 @media (min-width: 761px) and (max-width: 980px) {

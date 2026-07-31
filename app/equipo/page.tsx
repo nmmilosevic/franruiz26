@@ -96,8 +96,6 @@ export default function TeamPage() {
             <figure
               key={person.name}
               className={`team-person team-person-${index + 1}${person.featured ? " team-person--founder" : ""}`}
-              data-reveal
-              style={{ "--delay": `${(index % 3) * 70}ms` } as React.CSSProperties}
             >
               <div className="team-person-image">
                 <Image
@@ -105,6 +103,7 @@ export default function TeamPage() {
                   alt={person.name}
                   fill
                   sizes={person.featured ? "(max-width: 760px) 100vw, (max-width: 980px) 66vw, 42vw" : "(max-width: 760px) 100vw, 33vw"}
+                  priority={index < 3}
                   unoptimized
                 />
               </div>

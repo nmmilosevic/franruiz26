@@ -108,12 +108,14 @@ export default function MotionSystem() {
       const structuralSet = new Set(structural);
 
       structural.forEach((element) => {
+        if (element.matches(".team-person") || element.closest(".team-person")) return;
         if (element.querySelector(titleTargets)) return;
         if (!hasTargetAncestor(element, structuralSet, root)) targets.add(element);
       });
 
       const supporting = root.querySelectorAll<HTMLElement>(`${titleTargets}, p, .action-pill`);
       supporting.forEach((element) => {
+        if (element.closest(".team-person")) return;
         if (!hasTargetAncestor(element, targets, root)) targets.add(element);
       });
     });
