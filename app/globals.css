@@ -2869,69 +2869,74 @@ main > section:first-of-type {
 
 .team-person:hover img { transform: scale(1.025); }
 
-/* Team portraits: architectural plane reveal (clip + scale), no opacity wash */
-html.motion-ready .team-person[data-motion]:not([data-visible="true"]),
-html.motion-ready .team-person[data-motion][data-visible="true"] {
-  opacity: 1;
-  clip-path: none;
-  transform: none;
-  filter: none;
-  animation: none;
-}
-
-html.motion-ready .team-person:not([data-visible="true"]) .team-person-image {
-  clip-path: inset(0 0 100% 0);
-  transform: scale(1.035);
+/*
+  Team portraits: dedicated scroll reveal (clip-path plane + scale).
+  Independent from MotionSystem so it always runs on /equipo.
+*/
+.team-page-index[data-team-motion="ready"] .team-person .team-person-image {
+  overflow: hidden;
   transform-origin: center top;
-  will-change: clip-path, transform;
+  transition:
+    clip-path 900ms var(--ease),
+    transform 900ms var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
 }
 
-html.motion-ready .team-person:not([data-visible="true"]) figcaption {
+.team-page-index[data-team-motion="ready"] .team-person .team-person-image img {
+  transition: transform 1100ms var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.team-page-index[data-team-motion="ready"] .team-person figcaption {
+  transition:
+    opacity 720ms var(--ease),
+    transform 720ms var(--ease);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 140ms);
+}
+
+.team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) .team-person-image {
+  clip-path: inset(0 0 100% 0);
+  transform: scale(1.04);
+}
+
+.team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) .team-person-image img {
+  transform: translate3d(0, 8%, 0) scale(1.06);
+}
+
+.team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) figcaption {
   opacity: 0;
-  transform: translate3d(0, 14px, 0);
+  transform: translate3d(0, 16px, 0);
 }
 
-html.motion-ready .team-person[data-visible="true"] .team-person-image {
-  animation: team-portrait-reveal 820ms var(--ease) both;
-  animation-delay: var(--motion-delay, 0ms);
+.team-page-index[data-team-motion="ready"] .team-person.is-revealed .team-person-image {
+  clip-path: inset(0);
+  transform: scale(1);
 }
 
-html.motion-ready .team-person[data-visible="true"] figcaption {
-  animation: team-caption-reveal 720ms var(--ease) both;
-  animation-delay: calc(var(--motion-delay, 0ms) + 120ms);
+.team-page-index[data-team-motion="ready"] .team-person.is-revealed .team-person-image img {
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
-@keyframes team-portrait-reveal {
-  from {
-    clip-path: inset(0 0 100% 0);
-    transform: scale(1.035);
-  }
-  to {
-    clip-path: inset(0);
-    transform: scale(1);
-  }
+.team-page-index[data-team-motion="ready"] .team-person.is-revealed figcaption {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
-@keyframes team-caption-reveal {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 14px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
+.team-page-index[data-team-motion="ready"] .team-person.is-revealed:hover .team-person-image img {
+  transform: scale(1.025);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html.motion-ready .team-person:not([data-visible="true"]) .team-person-image,
-  html.motion-ready .team-person[data-visible="true"] .team-person-image,
-  html.motion-ready .team-person:not([data-visible="true"]) figcaption,
-  html.motion-ready .team-person[data-visible="true"] figcaption {
+  .team-page-index[data-team-motion="ready"] .team-person .team-person-image,
+  .team-page-index[data-team-motion="ready"] .team-person .team-person-image img,
+  .team-page-index[data-team-motion="ready"] .team-person figcaption,
+  .team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) .team-person-image,
+  .team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) .team-person-image img,
+  .team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) figcaption {
     clip-path: none !important;
     transform: none !important;
     opacity: 1 !important;
-    animation: none !important;
+    transition: none !important;
   }
 }
 

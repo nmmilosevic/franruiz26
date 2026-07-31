@@ -108,6 +108,7 @@ export default function MotionSystem() {
       const structuralSet = new Set(structural);
 
       structural.forEach((element) => {
+        if (element.matches(".team-person") || element.closest(".team-person")) return;
         if (element.querySelector(titleTargets)) return;
         if (!hasTargetAncestor(element, structuralSet, root)) targets.add(element);
       });
@@ -122,15 +123,7 @@ export default function MotionSystem() {
     const orderedTargets = [...targets];
     orderedTargets.forEach((element, index) => {
       element.dataset.motion = roleFor(element);
-      if (element.matches(".team-person")) {
-        const siblings = [...(element.parentElement?.children ?? [])].filter((node) =>
-          (node as HTMLElement).matches?.(".team-person"),
-        ) as HTMLElement[];
-        const teamIndex = Math.max(0, siblings.indexOf(element));
-        element.style.setProperty("--motion-delay", `${(teamIndex % 3) * 70}ms`);
-      } else {
-        element.style.setProperty("--motion-delay", `${(index % 4) * 40}ms`);
-      }
+      element.style.setProperty("--motion-delay", `${(index % 4) * 40}ms`);
       if (element.dataset.motion === "title") splitTitleIntoWords(element);
     });
 
@@ -155,17 +148,7 @@ export default function MotionSystem() {
       { threshold: 0.08, rootMargin: "0px 0px -3% 0px" },
     );
 
-    orderedTargets.forEach((element) => {
-      if (element.matches(".team-person")) {
-        const rect = element.getBoundingClientRect();
-        const inView = rect.top < window.innerHeight * 0.97 && rect.bottom > 40;
-        if (inView) {
-          element.dataset.visible = "true";
-          return;
-        }
-      }
-      observer.observe(element);
-    });
+    orderedTargets.forEach((element) => observer.observe(element));
 
     return () => {
       observer.disconnect();

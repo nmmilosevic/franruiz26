@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import ArrowIcon from "../components/ArrowIcon";
 import ActionLabel from "../components/ActionLabel";
 import GoogleReviewsSection from "../components/GoogleReviewsSection";
@@ -63,13 +63,77 @@ const team: readonly TeamMember[] = [
   { name: "Estrella López Moreno", role: { es: "Producción · Obras", en: "Production · Construction" }, image: "/media/team/estrella.png" },
 ] as const;
 
+function TeamPortrait({
+  person,
+  index,
+  lang,
+  motionReady,
+}: {
+  person: TeamMember;
+  index: number;
+  lang: Lang;
+  motionReady: boolean;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || !motionReady) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setRevealed(true);
+        observer.disconnect();
+      },
+      { threshold: 0.18, rootMargin: "0px 0px -6% 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [motionReady]);
+
+  return (
+    <figure
+      ref={ref}
+      className={`team-person team-person-${index + 1}${person.featured ? " team-person--founder" : ""}${revealed ? " is-revealed" : ""}`}
+      style={{ "--reveal-delay": `${(index % 3) * 90}ms` } as React.CSSProperties}
+    >
+      <div className="team-person-image">
+        <Image
+          src={person.image}
+          alt={person.name}
+          fill
+          sizes={person.featured ? "(max-width: 760px) 100vw, (max-width: 980px) 66vw, 42vw" : "(max-width: 760px) 100vw, 33vw"}
+          priority={index < 3}
+          unoptimized
+        />
+      </div>
+      <figcaption>
+        <strong>{person.name}</strong>
+        <span>{person.role[lang]}</span>
+      </figcaption>
+    </figure>
+  );
+}
+
 export default function TeamPage() {
   const lang = usePreferredLanguage();
   const t = copy[lang];
+  const [motionReady, setMotionReady] = useState(false);
 
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
+
+  useLayoutEffect(() => {
+    const frame = window.requestAnimationFrame(() => setMotionReady(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   const setLanguage = (next: Language) => {
     persistLanguage(next);
@@ -90,28 +154,19 @@ export default function TeamPage() {
         </div>
       </section>
 
-      <section className="team-page-index section-shell">
+      <section
+        className="team-page-index section-shell"
+        data-team-motion={motionReady ? "ready" : undefined}
+      >
         <div className="team-page-grid">
           {team.map((person, index) => (
-            <figure
+            <TeamPortrait
               key={person.name}
-              className={`team-person team-person-${index + 1}${person.featured ? " team-person--founder" : ""}`}
-            >
-              <div className="team-person-image">
-                <Image
-                  src={person.image}
-                  alt={person.name}
-                  fill
-                  sizes={person.featured ? "(max-width: 760px) 100vw, (max-width: 980px) 66vw, 42vw" : "(max-width: 760px) 100vw, 33vw"}
-                  priority={index < 3}
-                  unoptimized
-                />
-              </div>
-              <figcaption>
-                <strong>{person.name}</strong>
-                <span>{person.role[lang]}</span>
-              </figcaption>
-            </figure>
+              person={person}
+              index={index}
+              lang={lang}
+              motionReady={motionReady}
+            />
           ))}
         </div>
       </section>
