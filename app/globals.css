@@ -2870,21 +2870,19 @@ main > section:first-of-type {
 .team-person:hover img { transform: scale(1.025); }
 
 /*
-  Team portraits: dedicated scroll reveal (clip-path plane + scale).
-  Independent from MotionSystem so it always runs on /equipo.
+  Team portraits: dedicated scroll reveal (rise + scale).
+  Animate the frame itself — not the photo inside the crop.
 */
 .team-page-index[data-team-motion="ready"] .team-person .team-person-image {
   overflow: hidden;
-  transform-origin: center top;
-  transition:
-    clip-path 900ms var(--ease),
-    transform 900ms var(--ease);
+  transform-origin: center bottom;
+  transition: transform 900ms var(--ease);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
 .team-page-index[data-team-motion="ready"] .team-person .team-person-image img {
-  transition: transform 1100ms var(--ease);
-  transition-delay: var(--reveal-delay, 0ms);
+  transform: none;
+  transition: transform 850ms var(--ease);
 }
 
 .team-page-index[data-team-motion="ready"] .team-person figcaption {
@@ -2895,12 +2893,7 @@ main > section:first-of-type {
 }
 
 .team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) .team-person-image {
-  clip-path: inset(0 0 100% 0);
-  transform: scale(1.04);
-}
-
-.team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) .team-person-image img {
-  transform: translate3d(0, 8%, 0) scale(1.06);
+  transform: translate3d(0, 40px, 0) scale(0.985);
 }
 
 .team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) figcaption {
@@ -2909,11 +2902,6 @@ main > section:first-of-type {
 }
 
 .team-page-index[data-team-motion="ready"] .team-person.is-revealed .team-person-image {
-  clip-path: inset(0);
-  transform: scale(1);
-}
-
-.team-page-index[data-team-motion="ready"] .team-person.is-revealed .team-person-image img {
   transform: translate3d(0, 0, 0) scale(1);
 }
 
@@ -2931,9 +2919,7 @@ main > section:first-of-type {
   .team-page-index[data-team-motion="ready"] .team-person .team-person-image img,
   .team-page-index[data-team-motion="ready"] .team-person figcaption,
   .team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) .team-person-image,
-  .team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) .team-person-image img,
   .team-page-index[data-team-motion="ready"] .team-person:not(.is-revealed) figcaption {
-    clip-path: none !important;
     transform: none !important;
     opacity: 1 !important;
     transition: none !important;
@@ -7969,6 +7955,60 @@ main hr {
   filter: none !important;
 }
 
+/*
+  Sitewide photography reveal — rise from below + soft scale.
+  Images stay visible (no full clip-path hide).
+*/
+html.image-reveal-ready .image-reveal {
+  overflow: hidden;
+  transform-origin: center bottom;
+  will-change: transform;
+  transition: transform 900ms var(--ease);
+  transition-delay: var(--image-reveal-delay, 0ms);
+}
+
+html.image-reveal-ready .image-reveal img,
+html.image-reveal-ready img.image-reveal {
+  transition: transform 1100ms var(--ease);
+  transition-delay: var(--image-reveal-delay, 0ms);
+}
+
+html.image-reveal-ready .image-reveal:not(.is-image-revealed) {
+  transform: translate3d(0, 48px, 0) scale(0.985);
+}
+
+html.image-reveal-ready .image-reveal:not(.is-image-revealed) img {
+  transform: translate3d(0, 8%, 0) scale(1.04);
+}
+
+html.image-reveal-ready img.image-reveal:not(.is-image-revealed) {
+  transform: translate3d(0, 48px, 0) scale(0.985);
+}
+
+html.image-reveal-ready .image-reveal.is-image-revealed,
+html.image-reveal-ready img.image-reveal.is-image-revealed {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+html.image-reveal-ready .image-reveal.is-image-revealed img {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+html.image-reveal-ready .image-reveal.is-image-revealed:hover img,
+html.image-reveal-ready a:hover .image-reveal.is-image-revealed img {
+  transform: scale(1.025);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.image-reveal-ready .image-reveal,
+  html.image-reveal-ready .image-reveal img,
+  html.image-reveal-ready img.image-reveal {
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+}
+
 /* Site motion language — quiet optical focus with word-led headings. */
 html.motion-ready [data-motion]:not([data-visible="true"]) {
   opacity: 0;
@@ -8004,8 +8044,9 @@ html.motion-ready [data-motion="content"]:not([data-visible="true"]) {
 }
 
 html.motion-ready [data-motion="media"]:not([data-visible="true"]) {
-  clip-path: inset(2% .5% 1% .5%);
-  transform: translate3d(0, 14px, 0) scale(1.012);
+  opacity: 1;
+  clip-path: none;
+  transform: translate3d(0, 28px, 0) scale(0.985);
   filter: none;
 }
 
@@ -8123,20 +8164,14 @@ html.motion-ready [data-motion="ui"][data-visible="true"] {
 
 @keyframes motion-media-focus {
   0% {
-    opacity: 0;
-    clip-path: inset(2% .5% 1% .5%);
-    transform: translate3d(0, 14px, 0) scale(1.012);
-    filter: none;
-  }
-  58% {
-    opacity: .88;
-    clip-path: inset(.5% .1% 0 .1%);
-    transform: translate3d(0, 3px, 0) scale(1.003);
+    opacity: 1;
+    clip-path: none;
+    transform: translate3d(0, 28px, 0) scale(0.985);
     filter: none;
   }
   100% {
     opacity: 1;
-    clip-path: inset(0);
+    clip-path: none;
     transform: translate3d(0, 0, 0) scale(1);
     filter: none;
   }

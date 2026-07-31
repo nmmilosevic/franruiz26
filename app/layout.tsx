@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import MotionSystem from "./components/MotionSystem";
+import ImageRevealSystem from "./components/ImageRevealSystem";
 import PageTransition from "./components/PageTransition";
 import "./globals.css";
 
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={manrope.className}>
         <PageTransition />
         <MotionSystem />
+        <ImageRevealSystem />
         {children}
       </body>
     </html>

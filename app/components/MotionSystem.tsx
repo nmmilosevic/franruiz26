@@ -71,9 +71,29 @@ function splitTitleIntoWords(element: HTMLElement) {
   });
 }
 
+const mediaFrameTargets = [
+  ".home-project-image",
+  ".home-studio-image",
+  ".home-service-visual",
+  ".project-index-image",
+  ".project-gallery-item",
+  ".source-gallery-item",
+  ".service-archive-card figure",
+  ".service-related figure",
+  ".service-detail-gallery figure",
+  ".studio-profile-origin-media",
+  ".studio-profile-method-composition > figure",
+  ".studio-profile-disciplines-intro figure",
+  ".studio-profile-team-portrait",
+  ".studio-project-feature-image",
+  ".next-project-image",
+  ".image-reveal",
+].join(",");
+
 function roleFor(element: HTMLElement): MotionRole {
   if (
     element.matches("figure") ||
+    element.matches(mediaFrameTargets) ||
     /image|media|gallery|portrait|panorama/.test(element.className)
   ) {
     return "media";
@@ -108,6 +128,8 @@ export default function MotionSystem() {
       const structuralSet = new Set(structural);
 
       structural.forEach((element) => {
+        // Image frames are owned by ImageRevealSystem (reliable scroll reveal).
+        if (element.matches(mediaFrameTargets) || element.closest(mediaFrameTargets)) return;
         if (element.matches(".team-person") || element.closest(".team-person")) return;
         if (element.querySelector(titleTargets)) return;
         if (!hasTargetAncestor(element, structuralSet, root)) targets.add(element);
@@ -116,6 +138,7 @@ export default function MotionSystem() {
       const supporting = root.querySelectorAll<HTMLElement>(`${titleTargets}, p, .action-pill`);
       supporting.forEach((element) => {
         if (element.closest(".team-person")) return;
+        if (element.closest(mediaFrameTargets)) return;
         if (!hasTargetAncestor(element, targets, root)) targets.add(element);
       });
     });
