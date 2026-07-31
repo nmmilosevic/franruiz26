@@ -2867,22 +2867,73 @@ main > section:first-of-type {
   transition: transform 850ms var(--ease);
 }
 
-/* Team portraits: no reveal/fade — full image from first paint */
-.team-person,
-.team-person[data-reveal],
-.team-person[data-motion],
-html.motion-ready .team-person[data-motion],
+.team-person:hover img { transform: scale(1.025); }
+
+/* Team portraits: architectural plane reveal (clip + scale), no opacity wash */
 html.motion-ready .team-person[data-motion]:not([data-visible="true"]),
 html.motion-ready .team-person[data-motion][data-visible="true"] {
-  opacity: 1 !important;
-  transform: none !important;
-  clip-path: none !important;
-  filter: none !important;
-  animation: none !important;
-  transition: none !important;
+  opacity: 1;
+  clip-path: none;
+  transform: none;
+  filter: none;
+  animation: none;
 }
 
-.team-person:hover img { transform: scale(1.025); }
+html.motion-ready .team-person:not([data-visible="true"]) .team-person-image {
+  clip-path: inset(0 0 100% 0);
+  transform: scale(1.035);
+  transform-origin: center top;
+  will-change: clip-path, transform;
+}
+
+html.motion-ready .team-person:not([data-visible="true"]) figcaption {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+}
+
+html.motion-ready .team-person[data-visible="true"] .team-person-image {
+  animation: team-portrait-reveal 820ms var(--ease) both;
+  animation-delay: var(--motion-delay, 0ms);
+}
+
+html.motion-ready .team-person[data-visible="true"] figcaption {
+  animation: team-caption-reveal 720ms var(--ease) both;
+  animation-delay: calc(var(--motion-delay, 0ms) + 120ms);
+}
+
+@keyframes team-portrait-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: scale(1.035);
+  }
+  to {
+    clip-path: inset(0);
+    transform: scale(1);
+  }
+}
+
+@keyframes team-caption-reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.motion-ready .team-person:not([data-visible="true"]) .team-person-image,
+  html.motion-ready .team-person[data-visible="true"] .team-person-image,
+  html.motion-ready .team-person:not([data-visible="true"]) figcaption,
+  html.motion-ready .team-person[data-visible="true"] figcaption {
+    clip-path: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    animation: none !important;
+  }
+}
 
 @media (min-width: 761px) and (max-width: 980px) {
   .team-page-grid {
