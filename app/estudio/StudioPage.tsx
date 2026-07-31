@@ -181,10 +181,10 @@ const methodVisuals = [
   },
 ] as const;
 
-export default function StudioPage() {
-  const [lang, setLang] = useState<Lang>("es");
+export default function StudioPage({ language = "es" }: { language?: Lang }) {
   const [activeMethod, setActiveMethod] = useState(0);
   const [activeDiscipline, setActiveDiscipline] = useState(0);
+  const lang = language;
   const t = copy[lang];
 
   useEffect(() => {
@@ -193,13 +193,13 @@ export default function StudioPage() {
 
   return (
     <main className="studio-profile">
-      <MainHeader language={lang} onLanguageChange={setLang} current="studio" theme="light" />
+      <MainHeader language={lang} current="studio" theme="light" />
 
       <section className="studio-profile-hero editorial-route-hero section-shell" id="top">
         <div className="studio-profile-hero-copy">
           <h1>{t.heroTitle}</h1>
           <p>{t.heroBody}</p>
-          <Link className="action-pill" href="/contacto"><ActionLabel>{t.heroCta}</ActionLabel><ArrowIcon /></Link>
+          <Link className="action-pill" href={lang === "en" ? "/en/contact" : "/contacto"}><ActionLabel>{t.heroCta}</ActionLabel><ArrowIcon /></Link>
           <div className="studio-profile-hero-signature">
             <dl className="studio-profile-proof">
               {t.heroFacts.map(([label, value]) => (
@@ -367,7 +367,7 @@ export default function StudioPage() {
           <div data-reveal>
             <h2>{t.contactTitle}</h2>
             <p>{t.contactBody}</p>
-            <Link className="action-pill" href="/contacto"><ActionLabel>{t.contactCta}</ActionLabel><ArrowIcon /></Link>
+            <Link className="action-pill" href={lang === "en" ? "/en/contact" : "/contacto"}><ActionLabel>{t.contactCta}</ActionLabel><ArrowIcon /></Link>
           </div>
           <address data-reveal>
               <strong>{t.offices}</strong>

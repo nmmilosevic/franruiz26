@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import ContactPage from "../../contacto/ContactPage";
+import ProjectsIndexPage from "../../components/ProjectsIndexPage";
 import ServiceDetailPage from "../../components/ServiceDetailPage";
 import SourceContentPage from "../../components/SourceContentPage";
+import StudioPage from "../../estudio/StudioPage";
 import pagesData from "../../data/pages.json";
 import { serviceFromSlug } from "../../data/services";
 
@@ -17,6 +20,34 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+
+  if (slug === "projects") {
+    return {
+      title: "Projects | Fran Ruiz Architects",
+      description:
+        "Complete project archive by Fran Ruiz Architects across Málaga, Marbella, and the Costa del Sol.",
+      alternates: { canonical: "/en/projects" },
+    };
+  }
+
+  if (slug === "the-study") {
+    return {
+      title: "Studio | Fran Ruiz Architects",
+      description:
+        "Fran Ruiz Architects is a multidisciplinary practice with studios in Málaga and Marbella.",
+      alternates: { canonical: "/en/the-study" },
+    };
+  }
+
+  if (slug === "contact") {
+    return {
+      title: "Contact | Fran Ruiz Architects",
+      description:
+        "Contact Fran Ruiz Architects to discuss your project in Málaga, Marbella, and the Costa del Sol.",
+      alternates: { canonical: "/en/contact" },
+    };
+  }
+
   const page = pagesData.find((item) => item.language === "en" && item.slug === slug);
   if (!page) return {};
   const title = page.headings[0] || page.title;
@@ -51,6 +82,17 @@ export default async function EnglishSourcePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
+  if (slug === "projects") {
+    return <ProjectsIndexPage language="en" />;
+  }
+  if (slug === "the-study") {
+    return <StudioPage language="en" />;
+  }
+  if (slug === "contact") {
+    return <ContactPage language="en" />;
+  }
+
   const page = pagesData.find((item) => item.language === "en" && item.slug === slug);
   if (!page) notFound();
   if (serviceFromSlug(slug, "en")) {

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MainHeader from "./MainHeader";
 import SiteFooter from "./SiteFooter";
 import ArrowIcon from "./ArrowIcon";
@@ -143,8 +143,7 @@ const heroSlides = [
   },
 ] as const;
 
-export default function HomeExperience() {
-  const [language, setLanguage] = useState<"es" | "en">("es");
+export default function HomeExperience({ language = "es" }: { language?: "es" | "en" }) {
   const t = copy[language];
 
   useEffect(() => {
@@ -156,7 +155,7 @@ export default function HomeExperience() {
 
   return (
     <main className="new-home" id="top">
-      <MainHeader language={language} onLanguageChange={setLanguage} theme="dark" />
+      <MainHeader language={language} theme="dark" />
 
       <section className="new-hero">
         <div className="new-hero-media">
@@ -178,7 +177,7 @@ export default function HomeExperience() {
           <h1>{t.heroTitle}</h1>
           <div className="new-hero-bottom">
             <p>{t.heroBody}</p>
-            <Link className="action-pill action-pill--on-dark" href="/proyectos"><ActionLabel>{t.explore}</ActionLabel><ArrowIcon /></Link>
+            <Link className="action-pill action-pill--on-dark" href={language === "en" ? "/en/projects" : "/proyectos"}><ActionLabel>{t.explore}</ActionLabel><ArrowIcon /></Link>
           </div>
         </div>
         <p className="new-hero-scroll"><span />{t.scroll}</p>
@@ -190,7 +189,7 @@ export default function HomeExperience() {
 
       <section className="home-selected section-shell">
         <div className="home-section-head" data-reveal>
-          <Link className="action-pill" href="/proyectos"><ActionLabel>{t.archive}</ActionLabel><ArrowIcon direction="right" /></Link>
+          <Link className="action-pill" href={language === "en" ? "/en/projects" : "/proyectos"}><ActionLabel>{t.archive}</ActionLabel><ArrowIcon direction="right" /></Link>
         </div>
         <div className="home-projects">
           {featuredProjects.map((project, index) => (
@@ -255,7 +254,7 @@ export default function HomeExperience() {
         <div className="home-studio-copy" data-reveal>
           <h2>{t.studioTitle}</h2>
           <p>{t.studioBody}</p>
-          <Link className="action-pill" href="/estudio"><ActionLabel>{t.studioLink}</ActionLabel><ArrowIcon direction="right" /></Link>
+          <Link className="action-pill" href={language === "en" ? "/en/the-study" : "/estudio"}><ActionLabel>{t.studioLink}</ActionLabel><ArrowIcon direction="right" /></Link>
         </div>
       </section>
 

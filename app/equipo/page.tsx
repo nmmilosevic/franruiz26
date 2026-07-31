@@ -8,6 +8,7 @@ import ActionLabel from "../components/ActionLabel";
 import GoogleReviewsSection from "../components/GoogleReviewsSection";
 import MainHeader from "../components/MainHeader";
 import SiteFooter from "../components/SiteFooter";
+import { readStoredLanguage, type Language } from "../lib/language";
 
 type Lang = "es" | "en";
 
@@ -66,12 +67,21 @@ export default function TeamPage() {
   const t = copy[lang];
 
   useEffect(() => {
+    const stored = readStoredLanguage();
+    if (stored) setLang(stored);
+  }, []);
+
+  useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
 
+  const setLanguage = (next: Language) => {
+    setLang(next);
+  };
+
   return (
     <main className="team-page">
-      <MainHeader language={lang} onLanguageChange={setLang} theme="light" current="team" />
+      <MainHeader language={lang} onLanguageChange={setLanguage} theme="light" current="team" />
 
       <section className="team-page-hero editorial-route-hero">
         <div className="team-page-hero-inner section-shell">
@@ -118,7 +128,7 @@ export default function TeamPage() {
           <h2>{t.closing}</h2>
           <div className="team-page-closing-support">
             <p>{t.closingBody}</p>
-            <Link className="action-pill" href="/contacto"><ActionLabel>{t.cta}</ActionLabel><ArrowIcon /></Link>
+            <Link className="action-pill" href={lang === "en" ? "/en/contact" : "/contacto"}><ActionLabel>{t.cta}</ActionLabel><ArrowIcon /></Link>
           </div>
         </div>
       </section>

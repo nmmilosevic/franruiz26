@@ -50,8 +50,8 @@ const copy = {
   },
 } as const;
 
-export default function ContactPage() {
-  const [lang, setLang] = useState<Lang>("es");
+export default function ContactPage({ language = "es" }: { language?: Lang }) {
+  const lang = language;
   const [prepared, setPrepared] = useState(false);
   const t = copy[lang];
 
@@ -81,7 +81,7 @@ export default function ContactPage() {
 
   return (
     <main className="contact-page">
-      <MainHeader language={lang} onLanguageChange={setLang} current="contact" />
+      <MainHeader language={lang} current="contact" />
 
       <section className="contact-page-hero section-shell">
         <h1>{t.title}</h1>

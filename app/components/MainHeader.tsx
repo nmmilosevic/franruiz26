@@ -2,12 +2,20 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { type MouseEvent, useEffect, useState } from "react";
 import { serviceHref, services as serviceItems } from "../data/services";
+import {
+  getAlternatePath,
+  homeHref,
+  isSharedLanguagePath,
+  languageFromPath,
+  persistLanguage,
+  readStoredLanguage,
+  type Language,
+} from "../lib/language";
 import ArrowIcon from "./ArrowIcon";
 
-type Language = "es" | "en";
 type HeaderSection = "projects" | "services" | "studio" | "team" | "contact";
 
 type MainHeaderProps = {
@@ -30,6 +38,7 @@ const labels = {
     language: "Idioma",
     open: "Abrir menú",
     close: "Cerrar menú",
+    brand: "Fran Ruiz Arquitectos, inicio",
   },
   en: {
     projects: "Projects",
@@ -43,6 +52,7 @@ const labels = {
     language: "Language",
     open: "Open menu",
     close: "Close menu",
+    brand: "Fran Ruiz Architects, home",
   },
 } as const;
 
@@ -59,12 +69,36 @@ function MainHeaderRoute({
   current,
   pathname,
 }: MainHeaderProps & { pathname: string }) {
-  const [localLanguage, setLocalLanguage] = useState<Language>(controlledLanguage ?? "es");
+  const router = useRouter();
+  const pathLanguage = languageFromPath(pathname);
+  const sharedPath = isSharedLanguagePath(pathname);
+
+  const [localLanguage, setLocalLanguage] = useState<Language>(
+    controlledLanguage ?? pathLanguage,
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesMenuOpen, setServicesMenuOpen] = useState(false);
   const [headerAtTop, setHeaderAtTop] = useState(true);
-  const language = onLanguageChange ? (controlledLanguage ?? localLanguage) : localLanguage;
+
+  const language = onLanguageChange
+    ? (controlledLanguage ?? localLanguage)
+    : sharedPath
+      ? localLanguage
+      : (controlledLanguage ?? pathLanguage);
   const t = labels[language];
+  const brandHome = homeHref(language);
+
+  useEffect(() => {
+    if (!sharedPath || controlledLanguage || onLanguageChange) return;
+    const stored = readStoredLanguage();
+    if (stored && stored !== localLanguage) {
+      setLocalLanguage(stored);
+    }
+  }, [sharedPath, controlledLanguage, onLanguageChange, localLanguage]);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -101,13 +135,23 @@ function MainHeaderRoute({
   }, [menuOpen]);
 
   const changeLanguage = (nextLanguage: Language) => {
-    if (onLanguageChange) onLanguageChange(nextLanguage);
-    else setLocalLanguage(nextLanguage);
+    if (nextLanguage === language) return;
+
+    persistLanguage(nextLanguage);
+
+    const alternate = getAlternatePath(pathname, nextLanguage);
+    if (alternate !== pathname) {
+      router.push(alternate);
+      return;
+    }
+
+    setLocalLanguage(nextLanguage);
+    onLanguageChange?.(nextLanguage);
   };
 
   const handleHomeClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (
-      pathname !== "/" ||
+      pathname !== brandHome ||
       event.button !== 0 ||
       event.metaKey ||
       event.ctrlKey ||
@@ -154,7 +198,7 @@ function MainHeaderRoute({
       >
         <header className={`home-header theme-${theme} ${headerAtTop ? "is-at-top" : ""} ${menuOpen ? "is-menu-open" : ""}`}>
           <div className="home-header-inner section-shell">
-            <Link className="home-brand" href="/" onClick={handleHomeClick} aria-label="Fran Ruiz Arquitectos, inicio">
+            <Link className="home-brand" href={brandHome} onClick={handleHomeClick} aria-label={t.brand}>
               <Image src="/brand/logo-fran.svg" alt="Fran Ruiz Arquitectos" width={1435} height={461} priority unoptimized />
             </Link>
             <nav className="home-nav" aria-label={t.navigation}>
@@ -181,9 +225,9 @@ function MainHeaderRoute({
             </nav>
             <div className="home-actions">
               <div className="home-language" aria-label={t.language}>
-                <button className={language === "es" ? "active" : ""} onClick={() => changeLanguage("es")} aria-pressed={language === "es"}>ES</button>
+                <button type="button" className={language === "es" ? "active" : ""} onClick={() => changeLanguage("es")} aria-pressed={language === "es"}>ES</button>
                 <span>/</span>
-                <button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")} aria-pressed={language === "en"}>EN</button>
+                <button type="button" className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")} aria-pressed={language === "en"}>EN</button>
               </div>
               <button
                 className="home-menu-button"

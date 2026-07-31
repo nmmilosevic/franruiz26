@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ArchiveHeader from "../../components/ArchiveHeader";
+import SharedLanguageShell from "../../components/SharedLanguageShell";
 import ArrowIcon from "../../components/ArrowIcon";
-import SiteFooter from "../../components/SiteFooter";
 import projectsData from "../../data/projects.json";
 
 type ProjectVideo = {
@@ -57,8 +56,8 @@ export default async function ProjectPage({
   const nextProject = projectsData[(currentIndex + 1) % projectsData.length];
 
   return (
+    <SharedLanguageShell theme={project.featuredImage ? "dark" : "light"} current="projects">
     <main className="project-detail" id="top">
-      <ArchiveHeader theme={project.featuredImage ? "dark" : "light"} current="projects" />
 
       <section className="project-hero">
         {project.featuredImage ? (
@@ -159,8 +158,8 @@ export default async function ProjectPage({
           </span>
         </span>
       </Link>
-      <SiteFooter precedingTone="light" />
     </main>
+    </SharedLanguageShell>
   );
 }
 
