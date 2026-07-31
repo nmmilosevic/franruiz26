@@ -63,11 +63,13 @@ export default function ServiceIndexPage({ language }: { language: ServiceLangua
                   />
                 </figure>
                 <div className="service-archive-card-copy">
-                  <h2>{title}</h2>
+                  <div className="service-archive-card-heading">
+                    <h2>{title}</h2>
+                    <span className="project-direction" aria-hidden="true">
+                      <ArrowIcon />
+                    </span>
+                  </div>
                   {summary ? <p>{summary}</p> : null}
-                  <span className="project-direction" aria-hidden="true">
-                    <ArrowIcon />
-                  </span>
                 </div>
               </Link>
             </article>
