@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
-import { Manrope, Tenor_Sans } from "next/font/google";
+import { Manrope } from "next/font/google";
 import MotionSystem from "./components/MotionSystem";
 import PageTransition from "./components/PageTransition";
 import "./globals.css";
 
+// One sans family for body and titles — Tenor Sans read as serif to visitors.
 const manrope = Manrope({
-  variable: "--font-body",
+  variable: "--font-sans",
   subsets: ["latin"],
-  display: "swap",
-});
-
-const tenor = Tenor_Sans({
-  variable: "--font-display",
-  weight: "400",
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -42,10 +37,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    // Put font CSS variables on <html> so every descendant can use them.
-    // Apply manrope.className on <body> so body text gets a real font-family
-    // even if a CSS `var(--font-*)` reference fails (invalid vars fall back to serif).
-    <html lang="es" className={`${manrope.variable} ${tenor.variable}`}>
+    <html lang="es" className={manrope.variable}>
       <body className={manrope.className}>
         <PageTransition />
         <MotionSystem />

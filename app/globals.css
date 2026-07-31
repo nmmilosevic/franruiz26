@@ -1,10 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  /* Defaults before next/font overrides these on <html>. Without them,
-     `font-family: var(--font-body)` becomes invalid and browsers use serif. */
-  --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Tenor Sans", ui-sans-serif, system-ui, sans-serif;
+  /* Single sans stack for body + titles (Manrope via next/font --font-sans). */
+  --font-body: var(--font-sans), "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-sans), "Manrope", ui-sans-serif, system-ui, sans-serif;
   --bg: oklch(1 0 0);
   --surface: oklch(1 0 0);
   --ink: oklch(0.205 0 0);

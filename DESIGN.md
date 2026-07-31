@@ -21,8 +21,7 @@ Do not introduce beige, green, gold, or cool gray. Secondary values must be deri
 
 ## Typography
 
-- Display: Tenor Sans, regular. Architectural proportions, calm presence, no decorative italics.
-- Body and UI: Manrope, weights 400–700.
+- Display and body: Manrope, weights 400–700. One sans family sitewide for a clean architectural voice.
 - Display sizes use `clamp()` and never exceed 6rem.
 - Headings balance line breaks; body copy is capped at 70ch.
 - Labels may use uppercase only when shorter than four words.
