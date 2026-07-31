@@ -4044,11 +4044,6 @@ main > section:first-of-type {
 
 /* Mobile quality pass */
 @media (max-width: 760px) {
-  .home-header {
-    transition: transform 520ms var(--ease);
-    will-change: transform;
-  }
-
   .home-header-inner {
     padding-inline: .25rem;
   }
@@ -4101,11 +4096,6 @@ main > section:first-of-type {
   .home-header.theme-dark.is-at-top.is-menu-open .home-language button,
   .home-header.theme-dark.is-at-top.is-menu-open .home-language button.active {
     color: white;
-  }
-
-  .home-header.is-hidden:not(.is-menu-open) {
-    pointer-events: none;
-    transform: translateY(calc(-100% - 2rem));
   }
 
   .new-hero-copy {

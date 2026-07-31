@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type MouseEvent, useEffect, useRef, useState } from "react";
+import { type MouseEvent, useEffect, useState } from "react";
 import { serviceHref, services as serviceItems } from "../data/services";
 import ArrowIcon from "./ArrowIcon";
 
@@ -62,9 +62,7 @@ function MainHeaderRoute({
   const [localLanguage, setLocalLanguage] = useState<Language>(controlledLanguage ?? "es");
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesMenuOpen, setServicesMenuOpen] = useState(false);
-  const [headerHidden, setHeaderHidden] = useState(false);
   const [headerAtTop, setHeaderAtTop] = useState(true);
-  const previousScrollY = useRef(0);
   const language = onLanguageChange ? (controlledLanguage ?? localLanguage) : localLanguage;
   const t = labels[language];
 
@@ -80,30 +78,18 @@ function MainHeaderRoute({
       return;
     }
 
-    previousScrollY.current = window.scrollY;
     let frame = 0;
 
     const updateHeader = () => {
       if (frame) return;
 
       frame = window.requestAnimationFrame(() => {
-        const currentScrollY = window.scrollY;
-        const delta = currentScrollY - previousScrollY.current;
-        setHeaderAtTop(currentScrollY < 96);
-
-        if (window.innerWidth > 760 || currentScrollY < 96) {
-          setHeaderHidden(false);
-        } else if (delta > 2) {
-          setHeaderHidden(true);
-        } else if (delta < -2) {
-          setHeaderHidden(false);
-        }
-
-        previousScrollY.current = currentScrollY;
+        setHeaderAtTop(window.scrollY < 96);
         frame = 0;
       });
     };
 
+    updateHeader();
     window.addEventListener("scroll", updateHeader, { passive: true });
     window.addEventListener("resize", updateHeader);
 
@@ -166,7 +152,7 @@ function MainHeaderRoute({
           }
         }}
       >
-        <header className={`home-header theme-${theme} ${headerAtTop ? "is-at-top" : ""} ${menuOpen ? "is-menu-open" : ""} ${headerHidden ? "is-hidden" : ""}`}>
+        <header className={`home-header theme-${theme} ${headerAtTop ? "is-at-top" : ""} ${menuOpen ? "is-menu-open" : ""}`}>
           <div className="home-header-inner section-shell">
             <Link className="home-brand" href="/" onClick={handleHomeClick} aria-label="Fran Ruiz Arquitectos, inicio">
               <Image src="/brand/logo-fran.svg" alt="Fran Ruiz Arquitectos" width={1435} height={461} priority unoptimized />
