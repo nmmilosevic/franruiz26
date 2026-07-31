@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ArrowIcon from "../components/ArrowIcon";
 import ActionLabel from "../components/ActionLabel";
 import GoogleReviewsSection from "../components/GoogleReviewsSection";
 import MainHeader from "../components/MainHeader";
 import SiteFooter from "../components/SiteFooter";
-import { readStoredLanguage, type Language } from "../lib/language";
+import { persistLanguage, type Language } from "../lib/language";
+import { usePreferredLanguage } from "../lib/usePreferredLanguage";
 
 type Lang = "es" | "en";
 
@@ -63,20 +64,15 @@ const team: readonly TeamMember[] = [
 ] as const;
 
 export default function TeamPage() {
-  const [lang, setLang] = useState<Lang>("es");
+  const lang = usePreferredLanguage();
   const t = copy[lang];
-
-  useEffect(() => {
-    const stored = readStoredLanguage();
-    if (stored) setLang(stored);
-  }, []);
 
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
 
   const setLanguage = (next: Language) => {
-    setLang(next);
+    persistLanguage(next);
   };
 
   return (

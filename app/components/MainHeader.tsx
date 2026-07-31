@@ -11,9 +11,9 @@ import {
   isSharedLanguagePath,
   languageFromPath,
   persistLanguage,
-  readStoredLanguage,
   type Language,
 } from "../lib/language";
+import { usePreferredLanguage } from "../lib/usePreferredLanguage";
 import ArrowIcon from "./ArrowIcon";
 
 type HeaderSection = "projects" | "services" | "studio" | "team" | "contact";
@@ -72,29 +72,19 @@ function MainHeaderRoute({
   const router = useRouter();
   const pathLanguage = languageFromPath(pathname);
   const sharedPath = isSharedLanguagePath(pathname);
+  const preferredLanguage = usePreferredLanguage();
 
-  const [localLanguage, setLocalLanguage] = useState<Language>(
-    controlledLanguage ?? pathLanguage,
-  );
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesMenuOpen, setServicesMenuOpen] = useState(false);
   const [headerAtTop, setHeaderAtTop] = useState(true);
 
   const language = onLanguageChange
-    ? (controlledLanguage ?? localLanguage)
+    ? (controlledLanguage ?? preferredLanguage)
     : sharedPath
-      ? localLanguage
+      ? preferredLanguage
       : (controlledLanguage ?? pathLanguage);
   const t = labels[language];
   const brandHome = homeHref(language);
-
-  useEffect(() => {
-    if (!sharedPath || controlledLanguage || onLanguageChange) return;
-    const stored = readStoredLanguage();
-    if (stored && stored !== localLanguage) {
-      setLocalLanguage(stored);
-    }
-  }, [sharedPath, controlledLanguage, onLanguageChange, localLanguage]);
 
   useEffect(() => {
     document.documentElement.lang = language;
@@ -145,7 +135,6 @@ function MainHeaderRoute({
       return;
     }
 
-    setLocalLanguage(nextLanguage);
     onLanguageChange?.(nextLanguage);
   };
 

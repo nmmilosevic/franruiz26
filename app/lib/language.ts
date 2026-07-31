@@ -63,16 +63,48 @@ export function homeHref(language: Language): string {
   return language === "en" ? "/en" : "/";
 }
 
+const languageListeners = new Set<() => void>();
+
+function emitLanguageChange() {
+  languageListeners.forEach((listener) => listener());
+}
+
+/** Subscribe to preferred-language changes (same-tab + cross-tab). */
+export function subscribeLanguage(onStoreChange: () => void) {
+  languageListeners.add(onStoreChange);
+  if (typeof window !== "undefined") {
+    window.addEventListener("storage", onStoreChange);
+  }
+  return () => {
+    languageListeners.delete(onStoreChange);
+    if (typeof window !== "undefined") {
+      window.removeEventListener("storage", onStoreChange);
+    }
+  };
+}
+
+export function getStoredLanguageSnapshot(): Language {
+  return readStoredLanguage() ?? "es";
+}
+
+export function getServerLanguageSnapshot(): Language {
+  return "es";
+}
+
 export function persistLanguage(language: Language) {
   try {
     window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
   } catch {
     // Ignore private-mode / blocked storage.
   }
-  document.documentElement.lang = language;
+  if (typeof document !== "undefined") {
+    document.documentElement.lang = language;
+  }
+  emitLanguageChange();
 }
 
 export function readStoredLanguage(): Language | null {
+  if (typeof window === "undefined") return null;
   try {
     const value = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
     if (value === "es" || value === "en") return value;

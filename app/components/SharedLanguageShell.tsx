@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import MainHeader from "./MainHeader";
 import SiteFooter from "./SiteFooter";
-import { persistLanguage, readStoredLanguage, type Language } from "../lib/language";
+import { persistLanguage, type Language } from "../lib/language";
+import { usePreferredLanguage } from "../lib/usePreferredLanguage";
 
 type Props = {
   theme?: "light" | "dark";
@@ -22,16 +23,10 @@ export default function SharedLanguageShell({
   precedingTone = "light",
   children,
 }: Props) {
-  const [language, setLanguage] = useState<Language>("es");
-
-  useEffect(() => {
-    const stored = readStoredLanguage();
-    if (stored) setLanguage(stored);
-  }, []);
+  const language = usePreferredLanguage();
 
   const onLanguageChange = (next: Language) => {
     persistLanguage(next);
-    setLanguage(next);
   };
 
   return (
