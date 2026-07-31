@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 :root {
+  /* Defaults before next/font overrides these on <html>. Without them,
+     `font-family: var(--font-body)` becomes invalid and browsers use serif. */
+  --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Tenor Sans", ui-sans-serif, system-ui, sans-serif;
   --bg: oklch(1 0 0);
   --surface: oklch(1 0 0);
   --ink: oklch(0.205 0 0);
@@ -38,7 +42,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
@@ -60,7 +64,7 @@ img { display: block; }
 
 h1, h2, h3, p, blockquote { margin: 0; }
 h1, h2, blockquote {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: -0.025em;
   line-height: 0.98;
@@ -1269,20 +1273,24 @@ main > section:first-of-type {
 .home-services-dropdown {
   position: fixed;
   z-index: 52;
-  top: calc(1rem + 84px);
+  /* Sit just under the floating header pill on any viewport height. */
+  top: calc(1rem + 98px + .35rem);
   right: max(1rem, calc((100vw - var(--layout-max)) / 2 + 1rem));
   left: max(1rem, calc((100vw - var(--layout-max)) / 2 + 1rem));
-  max-height: calc(100svh - 7.5rem);
-  padding: .65rem;
+  max-height: calc(100svh - 1rem - 98px - 1.5rem);
+  padding: clamp(.45rem, .8vw, .65rem);
   color: var(--ink);
   background: white;
-  border-radius: var(--radius-xl);
+  border-radius: clamp(1.25rem, 2vw, var(--radius-xl));
   box-shadow: 0 24px 70px rgb(0 0 0 / .14);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transform: translateY(-10px);
+  overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   transition:
     opacity 220ms ease,
     transform 420ms var(--ease),
@@ -1298,8 +1306,10 @@ main > section:first-of-type {
 }
 
 .home-services-dropdown-inner {
-  min-height: min(360px, calc(100svh - 9rem));
-  padding: clamp(2.25rem, 4vw, 4.5rem);
+  /* No forced tall empty field — height follows the list and available viewport. */
+  min-height: 0;
+  width: 100%;
+  padding: clamp(1.1rem, 2.4vw, 4.5rem);
   display: flex;
   align-items: center;
 }
@@ -1308,20 +1318,20 @@ main > section:first-of-type {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(.25rem, 1vw, .75rem) clamp(2rem, 5vw, 6rem);
+  gap: clamp(.1rem, .5vw, .75rem) clamp(1.25rem, 3.5vw, 6rem);
 }
 
 .home-services-dropdown-list a {
-  min-height: clamp(72px, 7vw, 104px);
-  padding: 1rem .25rem;
+  min-height: clamp(48px, 4.8vw + 1.2rem, 104px);
+  padding: clamp(.55rem, .9vw, 1rem) .25rem;
   border: 0;
   border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
+  gap: clamp(.75rem, 1.5vw, 1.5rem);
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(1.35rem, 2vw, 2.1rem);
+  font-size: clamp(1.05rem, .55rem + 1.15vw, 2.1rem);
   font-weight: 400;
   letter-spacing: -.025em;
   line-height: 1.08;
@@ -1329,12 +1339,14 @@ main > section:first-of-type {
 }
 
 .home-services-dropdown-list a span {
-  max-width: 18ch;
+  max-width: min(18ch, 100%);
   transition: transform 500ms var(--ease), opacity 300ms ease;
 }
 
 .home-services-dropdown-list a svg {
   flex: 0 0 auto;
+  width: clamp(1rem, 1.2vw, 1.35rem);
+  height: clamp(1rem, 1.2vw, 1.35rem);
   opacity: .28;
   transition: opacity 240ms ease, transform 420ms var(--ease);
 }
@@ -1351,13 +1363,51 @@ main > section:first-of-type {
   transform: translateX(4px);
 }
 
+@media (max-width: 1280px) {
+  .home-services-dropdown-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(.15rem, .6vw, .6rem) clamp(1.5rem, 4vw, 4rem);
+  }
+}
+
 @media (max-width: 1180px) {
   .home-services-dropdown-inner {
     align-items: flex-start;
   }
+}
+
+@media (max-width: 980px) {
+  .home-services-dropdown {
+    top: calc(1rem + 90px + .35rem);
+    max-height: calc(100svh - 1rem - 90px - 1.25rem);
+  }
+
+  .home-services-dropdown-inner {
+    padding: clamp(1rem, 3vw, 2rem);
+  }
 
   .home-services-dropdown-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .home-services-dropdown-list a {
+    min-height: 52px;
+    padding-block: .85rem;
+    font-size: clamp(1.15rem, 2.8vw, 1.55rem);
+  }
+}
+
+@media (max-width: 900px) {
+  /* Mid tablets: desktop hover panel becomes a compact stacked list
+     that still fits under the header without needing a redesign. */
+  .home-nav {
+    gap: clamp(.75rem, 1.6vw, 1.5rem);
+  }
+
+  .home-nav a {
+    padding-inline: .65rem;
+    font-size: .72rem;
   }
 }
 
@@ -1833,11 +1883,19 @@ main > section:first-of-type {
   margin-top: clamp(4rem, 8vw, 8rem);
   padding-inline: var(--gutter);
   display: flex;
+  align-items: stretch;
   gap: clamp(1rem, 2vw, 2rem);
+  /* Explicit overflow-y:hidden is required. Setting only overflow-x:auto
+     computes overflow-y to auto too, and a few px of child overflow then
+     traps vertical page scroll inside this carousel. */
   overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  scroll-snap-type: x mandatory;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--gutter);
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .home-reviews-track::-webkit-scrollbar { display: none; }
@@ -1846,8 +1904,10 @@ main > section:first-of-type {
 .home-review-cta {
   flex: 0 0 clamp(300px, 38vw, 570px);
   min-height: clamp(370px, 39vw, 540px);
+  max-height: clamp(370px, 39vw, 540px);
   padding: clamp(1.75rem, 3vw, 3rem);
   scroll-snap-align: start;
+  overflow: hidden;
 }
 
 .home-review-card {
@@ -1888,8 +1948,8 @@ main > section:first-of-type {
 .home-review-card--long blockquote {
   max-width: 35ch;
   font-family: var(--font-body), sans-serif;
-  font-size: clamp(1.15rem, 1.55vw, 1.55rem);
-  line-height: 1.55;
+  font-size: clamp(1.05rem, 1.4vw, 1.4rem);
+  line-height: 1.5;
   letter-spacing: -.015em;
 }
 
@@ -2122,11 +2182,11 @@ main > section:first-of-type {
     gap: .8rem;
   }
   .home-menu .home-mobile-services > div a {
-    min-height: 34px;
+    min-height: 44px;
     display: flex;
     align-items: center;
     font-family: var(--font-body), sans-serif;
-    font-size: .92rem;
+    font-size: clamp(.88rem, 3.4vw, .98rem);
     line-height: 1.25;
   }
   .home-menu .home-mobile-services > div a:first-child {
@@ -2138,6 +2198,8 @@ main > section:first-of-type {
   }
   .home-menu:has(.home-mobile-services[open]) {
     justify-content: flex-start;
+    padding-top: 6.5rem;
+    padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
   }
   .new-hero h1 { max-width: 100%; font-size: clamp(3.25rem, 15vw, 5.5rem); }
   .new-hero-bottom { grid-template-columns: 1fr; }
@@ -2176,6 +2238,7 @@ main > section:first-of-type {
   .home-review-cta {
     flex-basis: calc(100vw - (var(--gutter) * 2.2));
     min-height: 500px;
+    max-height: 500px;
   }
   .home-review-card blockquote {
     font-size: clamp(1.55rem, 6vw, 2rem);
@@ -4110,6 +4173,7 @@ main > section:first-of-type {
   .home-review-card,
   .home-review-cta {
     min-height: 440px;
+    max-height: 440px;
   }
 
   .team-person figcaption {
@@ -4186,7 +4250,8 @@ main > section:first-of-type {
   }
 
   .home-project a:hover .home-project-caption > .project-direction,
-  .project-index-card a:hover .project-index-meta > .project-direction {
+  .project-index-card a:hover .project-index-meta > .project-direction,
+  .service-archive-card a:hover .project-direction {
     color: inherit;
     background: transparent;
     transform: none;
@@ -5206,7 +5271,6 @@ main > section:first-of-type {
   width: min(100%, var(--layout-max));
   margin-inline: auto;
   padding-inline: var(--gutter);
-  scroll-padding-inline: var(--gutter);
 }
 
 @media (max-width: 980px) {
@@ -5768,19 +5832,25 @@ main hr {
   line-height: 1.65;
 }
 
-.service-archive-card-copy b {
+.service-archive-card-copy > .project-direction {
   grid-column: 2;
   grid-row: 1;
-  padding-top: .4rem;
-  display: inline-flex;
-  align-items: center;
-  font-size: .7rem;
-  font-weight: 500;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  background: transparent;
+  transition: color 300ms ease, background 300ms ease, transform 450ms var(--ease);
 }
 
-.service-archive-card-copy b svg {
-  margin-left: .65rem;
-  vertical-align: middle;
+.service-archive-card a:hover .project-direction,
+.service-archive-card a:focus-visible .project-direction {
+  color: var(--bg);
+  background: var(--ink);
+  transform: translate(2px, -2px);
 }
 
 .service-detail {
@@ -6049,17 +6119,17 @@ main hr {
   }
 
   .service-archive-card-copy {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .service-archive-card-copy > p {
     grid-column: 1;
   }
 
-  .service-archive-card-copy b {
-    grid-column: 1;
-    grid-row: auto;
-    margin-top: .5rem;
+  .service-archive-card-copy > .project-direction {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
   }
 
   .service-detail-hero-copy {
@@ -6491,7 +6561,9 @@ main hr {
 }
 
 .home-footer-contact {
-  grid-column: 4 / 13;
+  /* Sit on the shared section shell edges so the block reads centered
+     on screen, matching the header gutters — not inset from column 4. */
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -6551,11 +6623,11 @@ main hr {
 }
 
 .home-footer-details section:first-child {
-  grid-column: 4 / 8;
+  grid-column: 1 / 6;
 }
 
 .home-footer-details section:last-child {
-  grid-column: 8 / 13;
+  grid-column: 7 / -1;
 }
 
 .home-footer-details address {
@@ -6612,11 +6684,11 @@ main hr {
 }
 
 .home-footer-base > p {
-  grid-column: 4 / 8;
+  grid-column: 1 / 7;
 }
 
 .home-footer-base > div {
-  grid-column: 9 / 13;
+  grid-column: 7 / -1;
   justify-self: end;
   display: flex;
   flex-wrap: wrap;

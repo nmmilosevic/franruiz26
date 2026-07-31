@@ -52,7 +52,7 @@ export default function ServiceIndexPage({ language }: { language: ServiceLangua
 
           return (
             <article className="service-archive-card" key={service.es}>
-              <Link href={serviceHref(service, language)}>
+              <Link href={serviceHref(service, language)} aria-label={`${t.action}: ${title}`}>
                 <figure>
                   <Image
                     src={service.image}
@@ -64,8 +64,10 @@ export default function ServiceIndexPage({ language }: { language: ServiceLangua
                 </figure>
                 <div className="service-archive-card-copy">
                   <h2>{title}</h2>
-                  <p>{summary}</p>
-                  <b>{t.action}<ArrowIcon /></b>
+                  {summary ? <p>{summary}</p> : null}
+                  <span className="project-direction" aria-hidden="true">
+                    <ArrowIcon />
+                  </span>
                 </div>
               </Link>
             </article>

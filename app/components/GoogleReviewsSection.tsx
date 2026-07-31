@@ -25,14 +25,27 @@ const copy = {
   },
 } as const;
 
+function getReviewStep(track: HTMLDivElement) {
+  const card = track.querySelector<HTMLElement>(".home-review-card, .home-review-cta");
+  if (!card) return Math.min(window.innerWidth * 0.72, 680);
+
+  const styles = window.getComputedStyle(track);
+  const gap = Number.parseFloat(styles.columnGap || styles.gap || "0") || 0;
+  return card.getBoundingClientRect().width + gap;
+}
+
 export default function GoogleReviewsSection({ language }: { language: ReviewLanguage }) {
   const reviewsTrack = useRef<HTMLDivElement>(null);
   const t = copy[language];
 
   const moveReviews = (direction: -1 | 1) => {
-    reviewsTrack.current?.scrollBy({
-      left: direction * Math.min(window.innerWidth * 0.72, 680),
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    const track = reviewsTrack.current;
+    if (!track) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    track.scrollBy({
+      left: direction * getReviewStep(track),
+      behavior: reduceMotion ? "auto" : "smooth",
     });
   };
 
@@ -52,7 +65,13 @@ export default function GoogleReviewsSection({ language }: { language: ReviewLan
         </div>
       </div>
 
-      <div className="home-reviews-track" ref={reviewsTrack}>
+      <div
+        className="home-reviews-track"
+        ref={reviewsTrack}
+        tabIndex={0}
+        role="region"
+        aria-label={language === "es" ? "Reseñas de Google" : "Google reviews"}
+      >
         {googleReviews.reviews.map((review) => (
           <article
             className={`home-review-card ${review[language].length > 110 ? "home-review-card--long" : ""}`}

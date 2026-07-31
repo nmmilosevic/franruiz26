@@ -42,8 +42,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es">
-      <body className={`${manrope.variable} ${tenor.variable}`}>
+    // Put font CSS variables on <html> so every descendant can use them.
+    // Apply manrope.className on <body> so body text gets a real font-family
+    // even if a CSS `var(--font-*)` reference fails (invalid vars fall back to serif).
+    <html lang="es" className={`${manrope.variable} ${tenor.variable}`}>
+      <body className={manrope.className}>
         <PageTransition />
         <MotionSystem />
         {children}
