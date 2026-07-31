@@ -189,12 +189,22 @@ export default function ServiceDetailPage({
               (item) => item.language === language && item.slug === candidate[language],
             );
             if (!relatedPage) return null;
+            const relatedTitle = relatedPage.headings[0] || relatedPage.title;
             return (
-              <Link href={serviceHref(candidate, language)} key={candidate.es}>
+              <Link
+                href={serviceHref(candidate, language)}
+                key={candidate.es}
+                aria-label={`${relatedTitle}`}
+              >
                 <figure>
                   <Image src={candidate.image} alt="" fill sizes="(max-width: 760px) 100vw, 33vw" unoptimized />
                 </figure>
-                <h3>{relatedPage.headings[0] || relatedPage.title}</h3>
+                <div className="service-related-copy">
+                  <h3>{relatedTitle}</h3>
+                  <span className="project-direction" aria-hidden="true">
+                    <ArrowIcon />
+                  </span>
+                </div>
               </Link>
             );
           })}
